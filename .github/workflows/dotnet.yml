@@ -41,7 +41,7 @@ jobs:
           context: ./Hackathon.AuthService
           file: ./Hackathon.AuthService/Dockerfile
           push: true
-          tags: ${{ env.AUTH_IMAGE_NAME }}:latest
+          tags: ${{ env.AUTH_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push Docker image - UserService
         uses: docker/build-push-action@v5
@@ -49,7 +49,7 @@ jobs:
           context: ./Hackathon.UserService
           file: ./Hackathon.UserService/Dockerfile
           push: true
-          tags: ${{ env.USER_IMAGE_NAME }}:latest
+          tags: ${{ env.USER_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push Docker image - ConsultationService
         uses: docker/build-push-action@v5
@@ -57,7 +57,7 @@ jobs:
           context: ./Hackathon.ConsultationService
           file: ./Hackathon.ConsultationService/Dockerfile
           push: true
-          tags: ${{ env.CONSULTATION_IMAGE_NAME }}:latest
+          tags: ${{ env.CONSULTATION_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push Docker image - ScheduleService
         uses: docker/build-push-action@v5
@@ -65,7 +65,7 @@ jobs:
           context: ./Hackathon.ScheduleService
           file: ./Hackathon.ScheduleService/Dockerfile
           push: true
-          tags: ${{ env.SCHEDULE_IMAGE_NAME }}:latest
+          tags: ${{ env.SCHEDULE_IMAGE_NAME }}:${{ github.sha }}
 
   deploy-to-aks:
     name: Deploy to AKS

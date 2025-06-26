@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: schedule
-          image: ghcr.io/${{ github.repository_owner }}/hackathon-schedule:latest
+          image: ghcr.io/${{ github.repository_owner }}/hackathon-schedule:${{ github.sha }}
           ports:
             - containerPort: 8080
 
