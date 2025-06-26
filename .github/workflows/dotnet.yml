@@ -75,22 +75,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Azure Login
-        uses: azure/login@v1
+      - name: Set up Kubernetes
+        uses: azure/k8s-set-context@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set AKS context
-        uses: azure/aks-set-context@v3
-        with:
-          resource-group: ${{ env.AKS_RESOURCE_GROUP }}
-          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
-
-      - name: Deploy to AKS
-        uses: Azure/k8s-deploy@v4
-        with:
-          action: "deploy"
-          manifests: |
-            ${{ env.KUBERNETES_MANIFESTS_PATH }}/authservice.yaml
-          images: |
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+          version: 1.21.0
+  
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s
