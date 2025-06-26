@@ -73,15 +73,14 @@ jobs:
     needs: build-and-push # Garante que este job só roda após o build e push
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Kubernetes
-        uses: azure/k8s-set-context@v1
+        uses: azure/k8s-set-context@v3
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-          version: 1.21.0
-  
+
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f ./k8s
