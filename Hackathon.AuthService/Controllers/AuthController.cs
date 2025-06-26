@@ -36,6 +36,12 @@ public class AuthController : ControllerBase
         return Ok(new { token });
     }
 
+     [HttpGet("/")]
+    public IActionResult Get()
+    {
+        return Ok("Auth Service is running");
+    }
+
     private string Hash(string senha)
     {
         using var sha = SHA256.Create();
