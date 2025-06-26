@@ -1,7 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Hackathon.AuthService.Services;
 
@@ -13,11 +13,11 @@ public class TokenService
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            claims: new[]
-            {
-                    new Claim("tipo", tipo),
+            claims:
+            [
+                new Claim("tipo", tipo),
                     new Claim("doc", doc)
-            },
+            ],
             expires: DateTime.UtcNow.AddHours(2),
             signingCredentials: creds);
 

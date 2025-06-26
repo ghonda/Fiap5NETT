@@ -1,17 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
 using Hackathon.ConsultationService.Data;
 using Hackathon.ConsultationService.DTOs;
 using Hackathon.ConsultationService.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ConsultationService.Controllers;
+namespace Hackathon.ConsultationService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ConsultationsController : ControllerBase
+public class ConsultationsController(AppDbContext context) : ControllerBase
 {
-    private readonly AppDbContext _context;
-    public ConsultationsController(AppDbContext context) => _context = context;
-
     [HttpPost]
     public IActionResult Create(CreateConsultationDto dto)
     {
@@ -23,8 +20,8 @@ public class ConsultationsController : ControllerBase
             Status = "pendente"
         };
 
-        _context.Consultations.Add(consulta);
-        _context.SaveChanges();
+        context.Consultations.Add(consulta);
+        context.SaveChanges();
 
         return Ok(consulta);
     }
@@ -32,14 +29,14 @@ public class ConsultationsController : ControllerBase
     [HttpPut("{id}/resposta")]
     public IActionResult Responder(int id, [FromQuery] string status)
     {
-        var consulta = _context.Consultations.Find(id);
+        var consulta = context.Consultations.Find(id);
         if (consulta == null) return NotFound();
 
         if (status != "aceita" && status != "recusada")
             return BadRequest("Status inválido");
 
         consulta.Status = status;
-        _context.SaveChanges();
+        context.SaveChanges();
 
         return Ok(consulta);
     }
@@ -47,12 +44,12 @@ public class ConsultationsController : ControllerBase
     [HttpPut("{id}/cancelar")]
     public IActionResult Cancelar(int id, [FromQuery] string justificativa)
     {
-        var consulta = _context.Consultations.Find(id);
+        var consulta = context.Consultations.Find(id);
         if (consulta == null) return NotFound();
 
         consulta.Status = "cancelada";
         consulta.JustificativaCancelamento = justificativa;
-        _context.SaveChanges();
+        context.SaveChanges();
 
         return Ok(consulta);
     }
@@ -60,7 +57,7 @@ public class ConsultationsController : ControllerBase
     [HttpGet("medico/{crm}")]
     public IActionResult GetByMedico(string crm)
     {
-        var consultas = _context.Consultations
+        var consultas = context.Consultations
             .Where(c => c.MedicoCRM == crm)
             .ToList();
 

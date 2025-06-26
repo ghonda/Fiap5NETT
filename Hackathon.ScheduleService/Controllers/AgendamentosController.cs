@@ -2,33 +2,25 @@
 using Hackathon.ScheduleService.Models;
 using Hackathon.ScheduleService.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hackathon.ScheduleService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AgendamentosController : ControllerBase
+public class AgendamentosController(AgendamentoService service) : ControllerBase
 {
-    private readonly AgendamentoService _agendamentoService;
-
-    public AgendamentosController(AgendamentoService service)
-    {
-        _agendamentoService = service;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAgendamentos()
     {
-        var agendamentos = await _agendamentoService.GetAgendamentos();
-        
+        var agendamentos = await service.GetAgendamentos();
+
         return Ok(agendamentos);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateAgendamento(Agendamento agendamento)
     {
-        await _agendamentoService.CreateAgendamento(agendamento);
+        await service.CreateAgendamento(agendamento);
 
         return Ok("Agendamento criado com sucesso.");
     }
@@ -36,7 +28,7 @@ public class AgendamentosController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Editar(Guid id, [FromBody] DateTime novaData)
     {
-        await _agendamentoService.EditarAgendamento(id, novaData);
+        await service.EditarAgendamento(id, novaData);
 
         return Ok("Agendamento editado com sucesso.");
 
@@ -46,7 +38,7 @@ public class AgendamentosController : ControllerBase
     public async Task<IActionResult> GetByMedico(string crm, bool disponivel)
     {
         // Obtém os agendamentos filtrados pelo CRM do médico e disponíveis
-        var agendamentos = await _agendamentoService.GetAgendamentos();
+        var agendamentos = await service.GetAgendamentos();
         var horarios = agendamentos
             .Where(a => a.MedicoCRM == crm && a.Disponivel == disponivel)
             .OrderBy(a => a.DataHora)
@@ -65,9 +57,10 @@ public class AgendamentosController : ControllerBase
     {
         try
         {
-            await _agendamentoService.DeleteAgendamento(id);
+            await service.DeleteAgendamento(id);
         }
-        catch (Exception ex) { 
+        catch (Exception ex)
+        {
             return BadRequest(ex.Message);
         }
 

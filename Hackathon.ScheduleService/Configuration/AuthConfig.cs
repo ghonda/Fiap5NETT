@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
-namespace Hackathon.ScheduleserService.Configuration;
+namespace Hackathon.ScheduleService.Configuration;
 
 public static class AuthConfig
 {
@@ -12,7 +12,7 @@ public static class AuthConfig
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
-                opt.TokenValidationParameters = new()
+                opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,

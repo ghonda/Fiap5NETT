@@ -1,8 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using Hackathon.AuthService.Data;
+﻿using Hackathon.AuthService.Data;
 using Hackathon.AuthService.Models;
 using Hackathon.AuthService.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,25 +9,21 @@ namespace Hackathon.AuthService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(AppDbContext context) : ControllerBase
 {
-    private readonly AppDbContext _context;
-
-    public AuthController(AppDbContext context) => _context = context;
-
     [HttpPost("register")]
     public IActionResult Register(User user)
     {
         user.PasswordHash = Hash(user.PasswordHash);
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        context.Users.Add(user);
+        context.SaveChanges();
         return Ok("Usuário registrado");
     }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] User login)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Documento == login.Documento);
+        var user = context.Users.FirstOrDefault(u => u.Documento == login.Documento);
         if (user == null || user.PasswordHash != Hash(login.PasswordHash))
             return Unauthorized("Credenciais inválidas");
 
