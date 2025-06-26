@@ -1,0 +1,68 @@
+name: Build and Push to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  AUTH_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-auth
+  USER_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-user
+  CONSULTATION_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-consultation
+  SCHEDULE_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-schedule
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image - AuthService
+      uses: docker/build-push-action@v5
+      with:
+        context: ./Hackathon.AuthService
+        file: ./Hackathon.AuthService/Dockerfile
+        push: true
+        tags: ${{ env.AUTH_IMAGE_NAME }}:latest
+    
+    - name: Build and push Docker image - UserService
+      uses: docker/build-push-action@v5
+      with:
+        context: ./Hackathon.UserService
+        file: ./Hackathon.UserService/Dockerfile
+        push: true
+        tags: ${{ env.USER_IMAGE_NAME }}:latest
+        
+    - name: Build and push Docker image - ConsultationService
+      uses: docker/build-push-action@v5
+      with:
+        context: ./Hackathon.ConsultationService
+        file: ./Hackathon.ConsultationService/Dockerfile
+        push: true
+        tags: ${{ env.CONSULTATION_IMAGE_NAME }}:latest
+        
+    - name: Build and push Docker image - ScheduleService
+      uses: docker/build-push-action@v5
+      with:
+        context: ./Hackathon.ScheduleService
+        file: ./Hackathon.ScheduleService/Dockerfile
+        push: true
+        tags: ${{ env.SCHEDULE_IMAGE_NAME }}:latest
