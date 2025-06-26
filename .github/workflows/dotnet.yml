@@ -12,7 +12,6 @@ env:
   USER_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-user
   CONSULTATION_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-consultation
   SCHEDULE_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-schedule
-  MVC_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/hackathon-mvc
 
 jobs:
   build-and-push:
@@ -67,11 +66,3 @@ jobs:
           file: ./Hackathon.ScheduleService/Dockerfile
           push: true
           tags: ${{ env.SCHEDULE_IMAGE_NAME }}:latest
-
-      - name: Build and push Docker image - MVC
-        uses: docker/build-push-action@v5
-        with:
-          context: ./Hackathon.MVC
-          file: ./Hackathon.MVC/Dockerfile
-          push: true
-          tags: ${{ env.MVC_IMAGE_NAME }}:latest
