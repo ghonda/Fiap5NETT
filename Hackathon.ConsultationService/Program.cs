@@ -78,35 +78,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapMetrics();     // Prometheus  
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    var maxRetries = 3;
-    var delay = 5000;
-
-    for (int attempt = 1; attempt <= maxRetries; attempt++)
-    {
-        try
-        {
-            Console.WriteLine($"Tentativa {attempt} de conectar ao banco...");
-            db.Database.Migrate();
-            Console.WriteLine("Migra��o conclu�da!");
-            break;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Erro ao conectar ao banco: {ex.Message}");
-
-            if (attempt == maxRetries)
-            {
-                Console.WriteLine("N�mero m�ximo de tentativas atingido.");
-                throw;
-            }
-
-            Thread.Sleep(delay);
-        }
-    }
-}
-
 app.Run();
