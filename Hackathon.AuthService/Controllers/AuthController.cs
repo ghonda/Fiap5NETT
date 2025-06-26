@@ -36,8 +36,8 @@ public class AuthController : ControllerBase
         return Ok(new { token });
     }
 
-     [HttpGet("/")]
-    public IActionResult Get()
+     [HttpGet("status")]
+    public IActionResult Status()
     {
         return Ok("Auth Service is running");
     }
