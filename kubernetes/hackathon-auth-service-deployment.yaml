@@ -26,7 +26,7 @@ spec:
         - env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
-          image: ghcr.io/kasayuri/hackathon-auth:latest
+          image: ghcr.io/ghonda/hackathon-auth:latest
           name: hackathon-auth-service
           ports:
             - containerPort: 8080
