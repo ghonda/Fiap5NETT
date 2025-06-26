@@ -41,6 +41,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapMetrics();     // Prometheus  
 
-app.Services.ApplyDatabaseMigrations(maxRetries: 3, delay: 5000);
-
 app.Run();
