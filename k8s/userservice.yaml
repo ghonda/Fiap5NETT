@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: scheuserdule
-          image: ghcr.io/ghonda/hackathon-user:latest
+          image: ghcr.io/${{ github.repository_owner }}/hackathon-user:latest
           ports:
             - containerPort: 8080
 
