@@ -82,3 +82,4 @@ $RECYCLE.BIN/
 *.VC.db
 *.VC.VC.opendb
 *.VC.opendb
+kubeconfig.yaml
